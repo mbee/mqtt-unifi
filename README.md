@@ -19,7 +19,7 @@ variable | default | mandatory | description
 `UNIFI_VERSION` | 5              |   | unifi api version
 `UNIFI_PORT`    | 8443           |   | unifi server port
 `UNIFI_SITE_ID` | default        |   | unifi site id
-`UNITI_DELAY`   | 3              |   | refresh rate (seconds)
+`UNIFI_DELAY`   | 3              |   | refresh rate (seconds)
 `DEBUG`         |                |   | is set to true, will display debug messages on stdout
 
 ## events

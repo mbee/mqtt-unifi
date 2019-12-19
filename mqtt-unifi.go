@@ -106,7 +106,7 @@ func initVariables() {
 	unifiVersion = getStringInt("UNIFI_VERSION", 5, false)
 	unifiPort = getStringEnv("UNIFI_PORT", "8443", false)
 	unifiSiteID = getStringEnv("UNIFI_SITE_ID", "default", false)
-	unifiDelay = getDurationEnv("UNITI_DELAY", 3*time.Second, false)
+	unifiDelay = getDurationEnv("UNIFI_DELAY", 3*time.Second, false)
 	if strings.ToLower(os.Getenv("DEBUG")) == "true" || os.Getenv("DEBUG") == "1" {
 		log.SetLevel(log.DebugLevel)
 	}
