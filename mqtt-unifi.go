@@ -1,9 +1,3 @@
-// Copyright (c) 2014 The unifi Authors. All rights reserved.
-// Use of this source code is governed by ISC-style license
-// that can be found in the LICENSE file.
-
-// Example command log-roaming
-// log stations of a given site as they roam
 package main
 
 import (
@@ -103,7 +97,7 @@ func getDurationEnv(key string, def time.Duration, mandatory bool) time.Duration
 }
 
 func initVariables() {
-	mqttURL = getStringEnv("MQTT_URL", "tcp://localhost:1883", false)
+	mqttURL = getStringEnv("MQTT_URL", "localhost:1883", false)
 	mqttLogin = getStringEnv("MQTT_LOGIN", "", false)
 	mqttPassword = getStringEnv("MQTT_PASSWORD", "", false)
 	unifiHost = getStringEnv("UNIFI_HOST", "localhost", false)
@@ -112,9 +106,8 @@ func initVariables() {
 	unifiVersion = getStringInt("UNIFI_VERSION", 5, false)
 	unifiPort = getStringEnv("UNIFI_PORT", "8443", false)
 	unifiSiteID = getStringEnv("UNIFI_SITE_ID", "default", false)
-	unifiDelay = getDurationEnv("UNITI_DELAY", 1*time.Second, false)
-	if os.Getenv("DEBUG") == "true" || os.Getenv("DEBUG") == "True" ||
-		os.Getenv("DEBUG") == "1" {
+	unifiDelay = getDurationEnv("UNITI_DELAY", 3*time.Second, false)
+	if strings.ToLower(os.Getenv("DEBUG")) == "true" || os.Getenv("DEBUG") == "1" {
 		log.SetLevel(log.DebugLevel)
 	}
 }
@@ -176,13 +169,10 @@ func subscribe() {
 				Handler: func(topicName, message []byte) {
 					mac := strings.Split(string(topicName), "/")[3]
 					client, found := stamap[mac]
-					if found {
-						publish(fmt.Sprintf("mqtt-unifi/status/host/%s", mac), client)
-					} else {
-						publish(fmt.Sprintf("mqtt-unifi/status/host/%s", mac), roaming{
-							Mac: mac,
-						})
+					if !found {
+						client = roaming{Mac: mac}
 					}
+					publish("mqtt-unifi/status/host/"+mac, client)
 				},
 			},
 		},
@@ -233,21 +223,16 @@ func loopOnUnifi() {
 			}
 		}
 		for k, v := range newmap {
-			if z, ok := stamap[k]; !ok {
-				log.Debugf(" → %s appears on %s/%d %s/%s\n",
-					v.Name, v.Ap, v.Channel, v.Essid, v.IP)
+			if _, ok := stamap[k]; !ok {
+				log.Debugf(" → %s[%s] appears on %s/%d %s/%s\n",
+					k, v.Name, v.Ap, v.Channel, v.Essid, v.IP)
 				publish(fmt.Sprintf("mqtt-unifi/%s/new", k), v)
-			} else if z != v {
-				log.Debugf(" ↔ %s roams from %s/%d %s/%s to %s/%d %s/%s\n",
-					v.Name,
-					z.Ap, z.Channel, z.Essid, z.IP,
-					v.Ap, v.Channel, v.Essid, v.IP)
 			}
 			delete(stamap, k)
 		}
 		for k, v := range stamap {
-			log.Debugf(" ← %s vanishes from %s/%d %s/%s\n",
-				v.Name, v.Ap, v.Channel, v.Essid, v.IP)
+			log.Debugf(" ← %s[%s] vanishes from %s/%d %s/%s\n",
+				k, v.Name, v.Ap, v.Channel, v.Essid, v.IP)
 			publish(fmt.Sprintf("mqtt-unifi/%s/delete", k), v)
 		}
 		stamap = newmap
