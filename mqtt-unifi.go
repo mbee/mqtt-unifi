@@ -210,6 +210,8 @@ func loopOnUnifi() {
 		newmap := make(roamMap)
 		sta, err := u.Sta(site)
 		if err != nil {
+			log.Error("Unable to get the STA from unifi")
+			log.Error(err)
 			continue
 		}
 		for _, s := range sta {

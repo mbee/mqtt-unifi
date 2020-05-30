@@ -3,9 +3,9 @@
 VERSION=1.0.1
 NAME=mqtt-unifi
 
-echo build linux/arm/5
+echo build linux/arm/7
 mkdir -p release/$VERSION/linux/arm
-GOOS=linux GOARCH=arm GOARM=5 go build $NAME.go
+GOOS=linux GOARCH=arm GOARM=7 go build $NAME.go
 mv $NAME release/$VERSION/linux/arm
 
 echo build linux/amd64
