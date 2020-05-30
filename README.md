@@ -8,19 +8,19 @@ there's no flag, all parameters are set by environment variables
 
 ## variables
 
-variable | default | mandatory | description
----------|---------|-----------|------------
-`MQTT_URL`      | localhost:1883 |   | url for the mqtt server
-`MQTT_LOGIN`    |                |   | mqtt server login. Empty if no login
-`MQTT_PASSWORD` |                |   | mqtt server password. Empty if no password
-`UNIFI_HOST`    |                | x | unifi server name
-`UNIFI_USER`    |                | x | unifi server login
-`UNIFI_PASS`    |                | x | unifi server password
-`UNIFI_VERSION` | 5              |   | unifi api version
-`UNIFI_PORT`    | 8443           |   | unifi server port
-`UNIFI_SITE_ID` | default        |   | unifi site id
-`UNIFI_DELAY`   | 3              |   | refresh rate (seconds)
-`DEBUG`         |                |   | is set to true, will display debug messages on stdout
+| variable        | default        | mandatory | description                                           |
+| --------------- | -------------- | --------- | ----------------------------------------------------- |
+| `MQTT_URL`      | localhost:1883 |           | url for the mqtt server                               |
+| `MQTT_LOGIN`    |                |           | mqtt server login. Empty if no login                  |
+| `MQTT_PASSWORD` |                |           | mqtt server password. Empty if no password            |
+| `UNIFI_HOST`    |                | x         | unifi server name                                     |
+| `UNIFI_USER`    |                | x         | unifi server login                                    |
+| `UNIFI_PASS`    |                | x         | unifi server password                                 |
+| `UNIFI_VERSION` | 5              |           | unifi api version                                     |
+| `UNIFI_PORT`    | 8443           |           | unifi server port                                     |
+| `UNIFI_SITE_ID` | default        |           | unifi site id                                         |
+| `UNIFI_DELAY`   | 3              |           | refresh rate (seconds)                                |
+| `DEBUG`         |                |           | is set to true, will display debug messages on stdout |
 
 ## events
 
@@ -28,19 +28,19 @@ variable | default | mandatory | description
 
 mqtt-unifi will listen for the following events:
 
-input topic | input message | description
-------------|---------------|------------
-`mqtt-unifi/get/host/<mac address>` | `{}` |  Will answer with mqtt-unifi/status/host/<mac address>
+| input topic                         | input message | description                                           |
+| ----------------------------------- | ------------- | ----------------------------------------------------- |
+| `mqtt-unifi/get/host/<mac address>` | `{}`          | Will answer with mqtt-unifi/status/host/<mac address> |
 
 ### publish
 
 mqtt-unifi will publish the following events:
 
-topic | message | description
-------|---------|------------
-`mqtt-unifi/status/host/<mac address>` | default host payload (see below) | sent back after a mqtt-unifi/get/host/#
-`mqtt-unifi/<mac address>/new` | default host payload (see below) | sent each time a new host appears
-`mqtt-unifi/<mac address>/delete` | default host payload (see below) | sent each time a new host disappears
+| topic                                  | message                          | description                             |
+| -------------------------------------- | -------------------------------- | --------------------------------------- |
+| `mqtt-unifi/status/host/<mac address>` | default host payload (see below) | sent back after a mqtt-unifi/get/host/# |
+| `mqtt-unifi/new/host/<mac address>`    | default host payload (see below) | sent each time a new host appears       |
+| `mqtt-unifi/delete/host/<mac address>` | default host payload (see below) | sent each time a new host disappears    |
 
 ### payload
 

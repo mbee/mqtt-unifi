@@ -167,7 +167,7 @@ func subscribe() {
 				QoS:         mqtt.QoS0,
 				// Define the processing of the message handler.
 				Handler: func(topicName, message []byte) {
-					mac := strings.Split(string(topicName), "/")[3]
+					mac := strings.ToLower(strings.Split(string(topicName), "/")[3])
 					client, found := stamap[mac]
 					if !found {
 						client = roaming{Mac: mac}
@@ -213,8 +213,9 @@ func loopOnUnifi() {
 			continue
 		}
 		for _, s := range sta {
-			newmap[s.Mac] = roaming{
-				Mac:     s.Mac,
+			minMac := strings.ToLower(s.Mac)
+			newmap[minMac] = roaming{
+				Mac:     minMac,
 				Name:    s.Name(),
 				IP:      s.IP,
 				Ap:      apsmap[s.ApMac].Name,
@@ -226,14 +227,14 @@ func loopOnUnifi() {
 			if _, ok := stamap[k]; !ok {
 				log.Debugf(" → %s[%s] appears on %s/%d %s/%s\n",
 					k, v.Name, v.Ap, v.Channel, v.Essid, v.IP)
-				publish(fmt.Sprintf("mqtt-unifi/%s/new", k), v)
+				publish(fmt.Sprintf("mqtt-unifi/new/host/%s", k), v)
 			}
 			delete(stamap, k)
 		}
 		for k, v := range stamap {
 			log.Debugf(" ← %s[%s] vanishes from %s/%d %s/%s\n",
 				k, v.Name, v.Ap, v.Channel, v.Essid, v.IP)
-			publish(fmt.Sprintf("mqtt-unifi/%s/delete", k), v)
+			publish(fmt.Sprintf("mqtt-unifi/delete/host/%s", k), v)
 		}
 		stamap = newmap
 	}
