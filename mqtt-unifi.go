@@ -34,6 +34,7 @@ var (
 	mqttURL      string
 	mqttLogin    string
 	mqttPassword string
+	mqttName     string
 	unifiHost    string
 	unifiUser    string
 	unifiPass    string
@@ -100,6 +101,7 @@ func initVariables() {
 	mqttURL = getStringEnv("MQTT_URL", "localhost:1883", false)
 	mqttLogin = getStringEnv("MQTT_LOGIN", "", false)
 	mqttPassword = getStringEnv("MQTT_PASSWORD", "", false)
+	mqttName = getStringEnv("MQTT_NAME", "mqtt-unifi", false)
 	unifiHost = getStringEnv("UNIFI_HOST", "localhost", false)
 	unifiUser = getStringEnv("UNIFI_USER", "", true)
 	unifiPass = getStringEnv("UNIFI_PASS", "", true)
@@ -127,7 +129,7 @@ func initMqtt() {
 		Address:  mqttURL,
 		UserName: []byte(mqttLogin),
 		Password: []byte(mqttPassword),
-		ClientID: []byte("mqtt-unifi"),
+		ClientID: []byte(mqttName),
 	})
 	if err != nil {
 		log.Errorf("Unable to connect to mqtt %s\n", err.Error())
@@ -222,7 +224,7 @@ func loopOnUnifi() {
 				IP:      s.IP,
 				Ap:      apsmap[s.ApMac].Name,
 				Channel: s.Channel,
-				Essid:   s.ESSID,
+				Essid:   s.Essid,
 			}
 		}
 		for k, v := range newmap {
