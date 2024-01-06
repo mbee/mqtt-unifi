@@ -13,6 +13,7 @@ there's no flag, all parameters are set by environment variables
 | `MQTT_URL`      | localhost:1883 |           | url for the mqtt server                               |
 | `MQTT_LOGIN`    |                |           | mqtt server login. Empty if no login                  |
 | `MQTT_PASSWORD` |                |           | mqtt server password. Empty if no password            |
+| `MQTT_NAME`     |                |           | mqtt client name                                      |
 | `UNIFI_HOST`    |                | x         | unifi server name                                     |
 | `UNIFI_USER`    |                | x         | unifi server login                                    |
 | `UNIFI_PASS`    |                | x         | unifi server password                                 |
@@ -48,12 +49,12 @@ if the host requested by `mqtt-unifi/get/host/<mac address>` does not exist, mqt
 
 ```json
 {
-	"mac": "<mac address>",
-	"name": "",
-	"ip": "",
-	"ap": "",
-	"channel": "",
-	"essid": "",
+  "mac": "<mac address>",
+  "name": "",
+  "ip": "",
+  "ap": "",
+  "channel": "",
+  "essid": ""
 }
 ```
 
@@ -61,11 +62,11 @@ otherwise:
 
 ```json
 {
-	"mac": "<mac address>",
-	"name": "OnePlus4",
-	"ip": "192.168.0.2",
-	"ap": "",
-	"channel": "6",
-	"essid": "freebox",
- }
+  "mac": "<mac address>",
+  "name": "OnePlus4",
+  "ip": "192.168.0.2",
+  "ap": "",
+  "channel": "6",
+  "essid": "freebox"
+}
 ```

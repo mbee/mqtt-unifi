@@ -23,7 +23,7 @@ type roaming struct {
 	IP      string `json:"ip"`
 	Ap      string `json:"ap"`
 	Channel int    `json:"channel"`
-	Essid   string `json:"essid"`
+	ESSID   string `json:"essid"`
 }
 
 type roamMap map[string]roaming
@@ -224,20 +224,20 @@ func loopOnUnifi() {
 				IP:      s.IP,
 				Ap:      apsmap[s.ApMac].Name,
 				Channel: s.Channel,
-				Essid:   s.Essid,
+				ESSID:   s.ESSID,
 			}
 		}
 		for k, v := range newmap {
 			if _, ok := stamap[k]; !ok {
 				log.Debugf(" → %s[%s] appears on %s/%d %s/%s\n",
-					k, v.Name, v.Ap, v.Channel, v.Essid, v.IP)
+					k, v.Name, v.Ap, v.Channel, v.ESSID, v.IP)
 				publish(fmt.Sprintf("mqtt-unifi/new/host/%s", k), v)
 			}
 			delete(stamap, k)
 		}
 		for k, v := range stamap {
 			log.Debugf(" ← %s[%s] vanishes from %s/%d %s/%s\n",
-				k, v.Name, v.Ap, v.Channel, v.Essid, v.IP)
+				k, v.Name, v.Ap, v.Channel, v.ESSID, v.IP)
 			publish(fmt.Sprintf("mqtt-unifi/delete/host/%s", k), v)
 		}
 		stamap = newmap

@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-VERSION=1.0.2
+VERSION=1.0.3
 NAME=mqtt-unifi
 
 echo build linux/arm/7
